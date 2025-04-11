@@ -1,1 +1,4 @@
 this is test of this repository
+
+second test:
+Testing direct commits to main to check the rules.
