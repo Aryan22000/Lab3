@@ -1,4 +1,4 @@
 this is test of this repository
 
 second test:
-Testing direct commits to main to check the rules.
+Testing direct commits to main by using Pull request to check the rules from Repo Rules GitHub application.
