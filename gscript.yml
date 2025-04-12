@@ -30,15 +30,32 @@ jobs: # The jobs that run in this workflow
 # Comment on when an issue is closed
 
 # Comment on when an users opens the first pull request 
-      - name: Comment on closed issue #this step comments when an issue is closed
-        if: github.event.action == 'closed'
-        uses: peter-evans/create-or-update-comment@v1
-        with:
-          issue-number: ${{ github.event.issue.number }}
-          body: |
-            The issue is now resolved.
+   name: Comment on Issues and PRs
 
-  congratulate_first_pr: # this job runs when a pull request is opened
+on:
+  issues:
+    types: [closed]
+  pull_request:
+    types: [opened]
+
+jobs:
+  comment_on_closed_issue:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Comment when issue is closed
+        uses: actions/github-script@v6
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: "The issue is now resolved."
+            })
+
+  congratulate_first_pr:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
@@ -62,3 +79,4 @@ jobs: # The jobs that run in this workflow
                 body: "🎉 Congratulations on opening your first pull request!"
               });
             }
+
