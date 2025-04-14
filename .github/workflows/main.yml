@@ -32,7 +32,20 @@ jobs: # The jobs that run in this workflow
                         uses: actions/first-interaction@v1.3.0
                          with:
                           pr-message: Congrats on your first pr!
-
+                            
             })
           
-            
+                            comment_on_closed_issue:
+                            permissions:
+                            issues: write
+                            steps:
+      - name: Comment when issue is closed
+        uses: actions/github-script@v6
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: "The issue is now resolved."
+            })
